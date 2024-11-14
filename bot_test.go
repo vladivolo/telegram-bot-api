@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	TestToken               = "153667468:AAHlSHlMqSt1f_uFmVRJbm5gntu2HI4WW8I"
+	TestToken               = "6766212541:AAGQTAPSbZGQoJ-FmG-nyYZLPCQQCc5wFIw"
 	ChatID                  = 76918703
 	Channel                 = "@tgbotapitest"
 	SupergroupChatID        = -1001120141283
@@ -1046,5 +1046,44 @@ func TestPrepareInputMediaForParams(t *testing.T) {
 
 	if prepared[1].(InputMediaVideo).Media != FileID("test") {
 		t.Error("Passthrough value was not the same")
+	}
+}
+
+func TestCreateInvoiceLink(t *testing.T) {
+	bot, err := getBot(t)
+	if err != nil {
+		t.Fatal(err)
+	}
+	resp, err := bot.Request(NewInvoiceLink("Demo Invoice", "This is a demo invoice link", "command", "", "XTR", []int{}, []LabeledPrice{
+		{
+			Label:  "Demo Digital Token",
+			Amount: 100,
+		},
+	}))
+
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !resp.Ok {
+		t.Fatal("Response not OK", resp.ErrorCode, resp.Description)
+	}
+	result, err := resp.Result.MarshalJSON()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(string(result))
+}
+
+func TestSendPhoto(t *testing.T) {
+	bot, err := getBot(t)
+	if err != nil {
+		t.Fatal(err)
+	}
+	photo := NewPhoto(1632669575, FileURL("https://pub-4b4332e2985947ceacb0e1bdc9c540bd.r2.dev/novelcoronavirus-optimized.jpg"))
+	photo.Caption = "Welcome to Follow https://github.com/TUTUBIG"
+	photo.ShowCaptionAboveMedia = true
+	_, err = bot.Send(photo)
+	if err != nil {
+		t.Fatal(err)
 	}
 }
