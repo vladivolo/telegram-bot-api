@@ -759,3 +759,15 @@ func EscapeText(parseMode string, text string) string {
 
 	return replacer.Replace(text)
 }
+
+func (bot *BotAPI) GetStarTransactions(config GetStarTransactionsConfig) (StarTransactions, error) {
+	var starTransactions StarTransactions
+
+	resp, err := bot.Request(config)
+	if err != nil {
+		return starTransactions, err
+	}
+
+	err = json.Unmarshal(resp.Result, &starTransactions)
+	return starTransactions, err
+}

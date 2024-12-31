@@ -1118,3 +1118,24 @@ func TestSaveInlineMessage(t *testing.T) {
 
 	t.Log(message)
 }
+
+func TestGetStarTransactions(t *testing.T) {
+	bot, err := getBot(t)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	response, err := bot.GetStarTransactions(GetStarTransactionsConfig{
+		Offset: 200,
+		Limit:  100,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for _, transaction := range response.Transactions {
+		if transaction.Receiver != nil {
+			t.Logf("%+v\n", transaction)
+		}
+	}
+}
