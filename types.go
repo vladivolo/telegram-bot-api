@@ -3328,3 +3328,11 @@ type PreCheckoutQuery struct {
 	// optional
 	OrderInfo *OrderInfo `json:"order_info,omitempty"`
 }
+
+// PreparedInlineMessage describes an inline message to be sent by a user of a Mini App.
+type PreparedInlineMessage struct {
+	// Unique identifier of the prepared message
+	Id string `json:"id"`
+	// Expiration date of the prepared message, in Unix time. Expired prepared messages can no longer be used
+	ExpirationDate int64 `json:"expiration_date"`
+}

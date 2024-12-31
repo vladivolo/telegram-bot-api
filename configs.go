@@ -2627,3 +2627,31 @@ func prepareInputMediaForFiles(inputMedia []interface{}) []RequestFile {
 
 	return files
 }
+
+type SavePreparedInlineMessageConfig struct {
+	UserId            int64
+	Result            interface{} // Too many definitions to use generics but please make sure it is InlineQueryResult. https://core.telegram.org/bots/api#inlinequeryresult
+	AllowUserChats    bool
+	AllowBotChats     bool
+	AllowGroupChats   bool
+	AllowChannelChats bool
+}
+
+func (config SavePreparedInlineMessageConfig) method() string {
+	return "savePreparedInlineMessage"
+}
+
+func (config SavePreparedInlineMessageConfig) params() (Params, error) {
+	params := make(Params)
+
+	params.AddNonZero64("user_id", config.UserId)
+	if err := params.AddInterface("result", config.Result); err != nil {
+		return nil, err
+	}
+	params.AddBool("allow_user_chats", config.AllowUserChats)
+	params.AddBool("allow_bot_chats", config.AllowBotChats)
+	params.AddBool("allow_group_chats", config.AllowGroupChats)
+	params.AddBool("allow_channel_chats", config.AllowChannelChats)
+
+	return params, nil
+}

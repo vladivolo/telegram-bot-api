@@ -1,6 +1,7 @@
 package tgbotapi
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"testing"
@@ -36,7 +37,6 @@ func (t testLogger) Printf(format string, v ...interface{}) {
 
 func getBot(t *testing.T) (*BotAPI, error) {
 	bot, err := NewBotAPI(TestToken)
-	bot.Debug = true
 
 	logger := testLogger{t}
 	SetLogger(logger)
@@ -44,6 +44,8 @@ func getBot(t *testing.T) (*BotAPI, error) {
 	if err != nil {
 		t.Error(err)
 	}
+
+	bot.Debug = true
 
 	return bot, err
 }
@@ -1086,4 +1088,33 @@ func TestSendPhoto(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+}
+
+func TestSaveInlineMessage(t *testing.T) {
+	bot, err := NewBotAPI(TestToken)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	photo := NewInlineQueryResultPhoto(fmt.Sprintf("%d", time.Now().Unix()), "https://pub-6c52100fa9ac41f681f0713eac878541.r2.dev/xxx.png")
+	photo.Caption = "This is a demo saved inline query messages"
+	photo.ParseMode = "HTML"
+	photo.ThumbURL = "https://pub-6c52100fa9ac41f681f0713eac878541.r2.dev/xxx.png"
+	markup := NewInlineKeyboardMarkup(NewInlineKeyboardRow(NewInlineKeyboardButtonURL("Open in TOMO", fmt.Sprintf("https://www.google.com"))))
+	photo.ReplyMarkup = &markup
+
+	message, err := bot.SavePreparedInlineMessage(SavePreparedInlineMessageConfig{
+		UserId:            1632669575,
+		Result:            photo,
+		AllowUserChats:    true,
+		AllowBotChats:     true,
+		AllowGroupChats:   true,
+		AllowChannelChats: true,
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Log(message)
 }
