@@ -3337,6 +3337,12 @@ type PreparedInlineMessage struct {
 	ExpirationDate int64 `json:"expiration_date"`
 }
 
+// TransactionPartnerUser Describes a transaction with a user.
+type TransactionPartnerUser struct {
+	Type string `json:"type"`
+	User User   `json:"user"`
+}
+
 // StarTransaction Describes a Telegram Star transaction.
 type StarTransaction struct {
 	// Unique identifier of the transaction. Coincides with the identifier of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users.
