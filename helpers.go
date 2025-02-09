@@ -20,7 +20,7 @@ func NewMessage(chatID int64, text string) MessageConfig {
 			ChatID:           chatID,
 			ReplyToMessageID: 0,
 		},
-		Text:                  text,
+		Text: text,
 		DisableWebPagePreview: false,
 	}
 }
@@ -230,6 +230,14 @@ func NewInputMediaDocument(media RequestFileData) InputMediaDocument {
 			Type:  "document",
 			Media: media,
 		},
+	}
+}
+
+func NewPreCheckoutConfig(id string, ok bool, errMsg string) PreCheckoutConfig {
+	return PreCheckoutConfig{
+		PreCheckoutQueryID: id,
+		OK:                 ok,
+		ErrorMessage:       errMsg,
 	}
 }
 
